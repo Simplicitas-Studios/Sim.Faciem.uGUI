@@ -1,0 +1,21 @@
+{
+  "name": "com.sim.faciem-ugui",
+  "version": "1.0.0-alpha.1",
+  "displayName": "Sim.Faciem.uGUI",
+  "description": "uGUI Extension that brings Runtime Data Binding to the MonoBehaviour World",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.sim.faciem": "1.0.0-alpha.1"
+ },
+ "keywords": [
+    "Unity",
+    "Simplicitas",
+	"Faciem",
+	"uGUI"
+  ],
+  "author": {
+    "name": "Simplicitas-Studios",
+    "email": "pasdaa13@gmail.com",
+    "url": "https://github.com/Simplicitas-Studios"
+  }
+}

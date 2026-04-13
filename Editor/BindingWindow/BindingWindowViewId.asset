@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d89cf449c2c44a5f8474539a8bf9bc15, type: 3}
+  m_Name: BindingWindowViewId
+  m_EditorClassIdentifier: 
+  ViewId:
+    _id: Sim.Faciem/uGUI/BindingWindow
+  View: {fileID: 9197481963319205126, guid: 7c7b792bbd055fd4e840fc94907efc81, type: 3}
+  DataContext:
+    TypeName: Sim.Faciem.uGUI.Editor.BindingWindow.IBindingWindowDataContext, Sim.Faciem.uGUI.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Script: {fileID: 11500000, guid: 062cdbe516624f638914e1bf7c1c4a8d, type: 3}
+  ViewModel:
+    TypeName: Sim.Faciem.uGUI.Editor.BindingWindow.BindingWindowViewModel, Sim.Faciem.uGUI.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Script: {fileID: 11500000, guid: 498cd0d5c22c4bb88dea04bc25f42331, type: 3}
+  SourceCodeGeneration: 1
+  SourceFile: {fileID: 11500000, guid: 370cc62d610440e7a81ca8286282a839, type: 3}
