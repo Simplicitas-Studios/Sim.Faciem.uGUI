@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Plugins.Sim.Faciem.Shared;
-using Sim.Faciem.Controls;
-using Sim.Faciem.uGUI.Editor.Internal;
+﻿using Sim.Faciem.uGUI.Editor.Internal;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.UIElements;
