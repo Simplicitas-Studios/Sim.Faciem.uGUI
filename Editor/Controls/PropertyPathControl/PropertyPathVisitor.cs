@@ -6,7 +6,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls
     public class PropertyPathVisitor : IPropertyBagVisitor, ITypeVisitor
     {
         public List<IProperty> Properties { private get; set; }
-        
+
         public void Visit<TContainer>(IPropertyBag<TContainer> properties, ref TContainer container)
         {
             foreach (var property in properties.GetProperties())

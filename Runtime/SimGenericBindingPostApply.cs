@@ -16,7 +16,7 @@ namespace Sim.Faciem.uGUI
                 list = new List<Action<object, SimPropertyPath>>();
                 s_postApplyActions.Add(type, list);
             }
-            
+
             list.Add(action);
         }
 
@@ -28,6 +28,7 @@ namespace Sim.Faciem.uGUI
             {
                 return;
             }
+
             foreach (var action in actions)
             {
                 action(source, propertyPath);

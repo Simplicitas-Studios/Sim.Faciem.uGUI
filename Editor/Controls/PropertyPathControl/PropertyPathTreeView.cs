@@ -28,7 +28,6 @@ namespace Sim.Faciem.uGUI.Editor.Controls
 
             Reload();
         }
-        
 
         protected override float GetCustomRowHeight(int row, TreeViewItem item)
         {
@@ -46,10 +45,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls
             rowRect.x += 6;
 
             // Create a centered style based on EditorStyles.label
-            GUIStyle centeredStyle = new GUIStyle(EditorStyles.label)
-            {
-                alignment = TextAnchor.MiddleLeft
-            };
+            GUIStyle centeredStyle = new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft };
 
             // Draw the label
             EditorGUI.LabelField(rowRect, item.displayName, centeredStyle);
@@ -59,7 +55,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls
         {
             var root = new TreeViewItem { id = 0, depth = -1 };
             int id = 1;
-            
+
             BuildProperties(
                 root,
                 ref id,
@@ -68,8 +64,12 @@ namespace Sim.Faciem.uGUI.Editor.Controls
 
             if (!root.hasChildren)
             {
-                root.AddChild(new  TreeViewItem { id = 0, depth = -1 , displayName = "No compatible Properties available!"});
+                root.AddChild(new TreeViewItem
+                {
+                    id = 0, depth = -1, displayName = "No compatible Properties available!"
+                });
             }
+
             return root;
         }
 
@@ -99,10 +99,10 @@ namespace Sim.Faciem.uGUI.Editor.Controls
                         childPath.ToString(),
                         childPath.ToString(),
                         unpackedType);
-                    
-                    parent.AddChild(item);   
+
+                    parent.AddChild(item);
                 }
-                
+
                 if (PropertyContainerCompat.HasProperties(unpackedType))
                 {
                     BuildProperties(parent, ref id, unpackedType, childPath);
@@ -113,9 +113,9 @@ namespace Sim.Faciem.uGUI.Editor.Controls
         private Type TryUnpackReactiveTypes(Type valueType, out bool didUnpack)
         {
             didUnpack = false;
-            if(valueType.IsGenericType && (valueType.GetGenericTypeDefinition() == typeof(Observable<>)
-                                           || valueType.GetGenericTypeDefinition() == typeof(ReactiveProperty<>)
-                                           || valueType.GetGenericTypeDefinition() == typeof(ReadOnlyReactiveProperty<>)))
+            if (valueType.IsGenericType && (valueType.GetGenericTypeDefinition() == typeof(Observable<>)
+                    || valueType.GetGenericTypeDefinition() == typeof(ReactiveProperty<>)
+                    || valueType.GetGenericTypeDefinition() == typeof(ReadOnlyReactiveProperty<>)))
             {
                 var observableType = valueType.GetGenericArguments().First();
                 didUnpack = true;
@@ -124,7 +124,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls
 
             return valueType;
         }
-        
+
         private bool CheckCompatibility(Type valueType)
         {
             return _expectedValueType == null || _expectedValueType.IsAssignableFrom(valueType);
@@ -139,5 +139,4 @@ namespace Sim.Faciem.uGUI.Editor.Controls
             }
         }
     }
-
 }

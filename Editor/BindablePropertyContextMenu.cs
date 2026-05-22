@@ -18,7 +18,7 @@ namespace Sim.Faciem.uGUI.Editor
         private static bool s_ignoreSelf;
 
         public static Observable<Unit> EditDone => s_editDoneSubject;
-        
+
         [InitializeOnLoadMethod]
         public static void Init()
         {
@@ -45,7 +45,7 @@ namespace Sim.Faciem.uGUI.Editor
                     {
                         return;
                     }
-                    
+
                     if (!component.gameObject.TryGetComponent<SimAutoBindingComponent>(out var bindingComponent))
                     {
                         bindingComponent = component.gameObject.AddComponent<SimAutoBindingComponent>();
@@ -59,15 +59,13 @@ namespace Sim.Faciem.uGUI.Editor
                     else
                     {
                         var binding = bindingComponent.Bindings
-                            .FirstOrDefault(x => x.Target.Equals(s_lastPropertyTarget.Value)) ?? new GenericBindableProperty 
-                        { 
-                            Target = s_lastPropertyTarget.Value
-                        };
+                                .FirstOrDefault(x => x.Target.Equals(s_lastPropertyTarget.Value)) ??
+                            new GenericBindableProperty { Target = s_lastPropertyTarget.Value };
 
                         binding.BindingInfo = propertyChanged.BindingInfo;
                         bindingComponent.Bindings.Add(binding);
                     }
-                    
+
                     s_editDoneSubject.OnNext(Unit.Default);
                     EditorUtility.SetDirty(bindingComponent);
                 });
@@ -87,7 +85,7 @@ namespace Sim.Faciem.uGUI.Editor
                     var manipulationItemName = bindableProperty.BindingInfo.IsDefault
                         ? "Add Binding"
                         : "Edit Binding";
-                    
+
                     menu.AddItem(new GUIContent(manipulationItemName), false, () =>
                     {
                         s_lastProperty = parentProperty;
@@ -103,7 +101,8 @@ namespace Sim.Faciem.uGUI.Editor
                     {
                         menu.AddItem(new GUIContent("Remove Binding"), false, () =>
                         {
-                            var bindingInfo = parentProperty.FindPropertyRelative(nameof(IBindableProperty.BindingInfo));
+                            var bindingInfo =
+                                parentProperty.FindPropertyRelative(nameof(IBindableProperty.BindingInfo));
                             bindingInfo.boxedValue = default(SimBindingInfo);
                             bindingInfo.serializedObject.ApplyModifiedProperties();
                             EditorUtility.SetDirty(bindingInfo.serializedObject.targetObject);

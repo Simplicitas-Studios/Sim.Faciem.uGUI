@@ -78,10 +78,10 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
             get => _propertyPath;
             set => SetProperty(ref _propertyPath, value);
         }
-        
+
         [CreateProperty]
         public Command AddCommand { get; }
-        
+
         [CreateProperty]
         public Command CancelCommand { get; }
 
@@ -97,16 +97,16 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
                         .Prepend(this, vm => vm.HasConverterChainError),
                     (dataSource, path, hasConvertersError) =>
                         dataSource != null && !string.IsNullOrEmpty(path) && !hasConvertersError);
-            
+
             AddCommand = Command.Execute(SetBinding)
                 .WithCanExecute(canExecuteAddCommand);
 
             CancelCommand = Command.Execute(CloseWindow);
-            
+
             Disposables.Add(Property.Observe(x => x.DataSource)
                 .Subscribe(newDataSource =>
                 {
-                    DataSourceType = newDataSource?.GetInstanceID() != 0 
+                    DataSourceType = newDataSource?.GetInstanceID() != 0
                         ? newDataSource?.GetType().AssemblyQualifiedName ?? string.Empty
                         : string.Empty;
 
@@ -115,7 +115,7 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
                         PropertyPath = string.Empty;
                     }
                 }));
-            
+
             Disposables.Add(manipulationProvider
                 .BindableProperty
                 .Subscribe(bindableProperty =>
@@ -123,7 +123,7 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
                     DataSource = bindableProperty?.BindingInfo.DataSource;
                     PropertyPath = bindableProperty?.BindingInfo.PropertyPath.ToString();
                     RequiredPropertyType = bindableProperty?.BoundType?.AssemblyQualifiedName ?? string.Empty;
-                    Converters = bindableProperty?.BindingInfo.Converters ??  new List<SimConverterBaseBehaviour>();
+                    Converters = bindableProperty?.BindingInfo.Converters ?? new List<SimConverterBaseBehaviour>();
                 }));
         }
 
@@ -140,14 +140,12 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
             {
                 return;
             }
-            
+
             var newBindingInfo = new SimBindingInfo
             {
-                DataSource = DataSource,
-                PropertyPath = new SimPropertyPath(PropertyPath),
-                Converters = Converters
+                DataSource = DataSource, PropertyPath = new SimPropertyPath(PropertyPath), Converters = Converters
             };
-                
+
             _manipulationProvider.BindableProperty.CurrentValue.BindingInfo = newBindingInfo;
             _manipulationProvider.BindableProperty.ForceNotify();
             CloseWindow();

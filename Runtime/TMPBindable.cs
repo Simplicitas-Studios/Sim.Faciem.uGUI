@@ -26,12 +26,12 @@ namespace Sim.Faciem.uGUI
         }
 
 #if UNITY_EDITOR
-        
+
         private void Reset()
         {
             _textControl = GetComponent<TMP_Text>();
         }
-        
-        #endif
+
+#endif
     }
 }

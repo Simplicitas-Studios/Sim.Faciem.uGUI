@@ -56,7 +56,6 @@ namespace Sim.Faciem.uGUI.Editor.Controls
             }
         }
 
-
         // ────────────────────────────────
 
         private readonly TextField _textField;
@@ -68,25 +67,18 @@ namespace Sim.Faciem.uGUI.Editor.Controls
         public PropertyPathField()
         {
             var disposables = this.RegisterDisposableBag();
-            
+
             style.flexDirection = FlexDirection.Row;
             style.alignItems = Align.Center;
 
-            _textField = new TextField
-            {
-                isDelayed = true,
-                style =
-                {
-                    flexGrow = 1
-                }
-            };
+            _textField = new TextField { isDelayed = true, style = { flexGrow = 1 } };
 
             Add(_textField);
 
             disposables.Add(
                 _textField.ObserveChanges()
                     .Subscribe(newText => Value = newText));
-            
+
             disposables.Add(
                 _textField.FocusInAsObservable()
                     .Subscribe(_ => OpenPicker()));
@@ -103,8 +95,8 @@ namespace Sim.Faciem.uGUI.Editor.Controls
             var path = new SimPropertyPath(Value);
             var maybeType = FindTypeAtPath(path, remoteDataSourceType);
 
-            CurrentValueType = maybeType != null 
-                ? maybeType.AssemblyQualifiedName 
+            CurrentValueType = maybeType != null
+                ? maybeType.AssemblyQualifiedName
                 : string.Empty;
         }
 
@@ -131,7 +123,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls
                 Debug.LogWarning("PropertyPathField: ExpectedValueType is not set.");
                 return;
             }
-            
+
             try
             {
                 UnityEditor.PopupWindow.Show(
@@ -152,7 +144,6 @@ namespace Sim.Faciem.uGUI.Editor.Controls
             {
                 // Ignore
             }
-
         }
     }
 }

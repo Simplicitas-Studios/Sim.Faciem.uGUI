@@ -10,25 +10,23 @@ namespace Sim.Faciem.uGUI.Editor
     [CustomPropertyDrawer(typeof(BindableProperty<>))]
     public class BindablePropertyPropertyDrawer : PropertyDrawer
     {
-        private readonly Color _bindingAccentColor = new(87/255f, 133/255f, 217/255f, 1);
+        private readonly Color _bindingAccentColor = new(87 / 255f, 133 / 255f, 217 / 255f, 1);
         private static DebugPropertyVisitor s_DebugPropertyVisitor = new();
-        
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var valueProperty = property.FindPropertyRelative("_value");
-            
+
             var root = new VisualElement();
 
-            var valueField = new PropertyField(valueProperty)
-            {
-                label = property.displayName
-            };
+            var valueField = new PropertyField(valueProperty) { label = property.displayName };
 
             var bindingIcon = new VisualElement
             {
                 style =
                 {
-                    backgroundImage = new StyleBackground(EditorGUIUtility.IconContent("Binding").image as Texture2D),
+                    backgroundImage =
+                        new StyleBackground(EditorGUIUtility.IconContent("Binding").image as Texture2D),
                     position = Position.Absolute,
                     left = -12,
                     top = 2,
@@ -39,7 +37,7 @@ namespace Sim.Faciem.uGUI.Editor
                 }
             };
             root.Add(bindingIcon);
-            
+
             root.schedule.Execute(() => bindingIcon.style.display = property.boxedValue is IBindableProperty
                 {
                     BindingInfo: { IsDefault: true }
@@ -49,7 +47,7 @@ namespace Sim.Faciem.uGUI.Editor
                 .Every(200);
 
             root.Add(valueField);
-            
+
             var path = new PropertyPath(property.propertyPath);
             s_DebugPropertyVisitor.Path = path;
             var target = property.serializedObject.targetObject;
@@ -61,13 +59,14 @@ namespace Sim.Faciem.uGUI.Editor
 
                     var bindablePropertyElement = BindablePropertyElement.CreateElement(runtimeBindableProperty);
                     root.Add(bindablePropertyElement);
-                }   
+                }
             }
+
             s_DebugPropertyVisitor.Reset();
-            
+
             return root;
         }
-        
+
         private void AddBinding(SerializedProperty property)
         {
             Debug.Log($"Add binding for {property.propertyPath}");

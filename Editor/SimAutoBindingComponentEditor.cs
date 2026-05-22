@@ -15,23 +15,22 @@ namespace Sim.Faciem.uGUI.Editor
             var root = new VisualElement();
 
             var bindingListProperty = serializedObject.FindProperty(nameof(SimAutoBindingComponent.Bindings));
-            
+
             if (serializedObject.targetObject is SimAutoBindingComponent autoBindingComponent)
             {
                 DrawBindings(autoBindingComponent, bindingListProperty, root);
 
                 var disposables = root.RegisterDisposableBag();
-                
+
                 disposables.Add(
-                BindablePropertyContextMenu.EditDone
-                    .Subscribe(_ =>
-                    {
-                        serializedObject.Update();
-                        DrawBindings(autoBindingComponent, bindingListProperty, root);
-                    }));
+                    BindablePropertyContextMenu.EditDone
+                        .Subscribe(_ =>
+                        {
+                            serializedObject.Update();
+                            DrawBindings(autoBindingComponent, bindingListProperty, root);
+                        }));
             }
 
-            
             return root;
         }
 
@@ -56,7 +55,7 @@ namespace Sim.Faciem.uGUI.Editor
                 });
                 return;
             }
-            
+
             for (var index = 0; index < autoBindingComponent.Bindings.Count; index++)
             {
                 var binding = autoBindingComponent.Bindings[index];
@@ -113,48 +112,20 @@ namespace Sim.Faciem.uGUI.Editor
 
                 var row1Container = new VisualElement
                 {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                        marginBottom = 4
-                    }
+                    style = { flexDirection = FlexDirection.Row, marginBottom = 4 }
                 };
-                row1Container.Add(new Label("Target:")
-                {
-                    style =
-                    {
-                        minWidth = 100
-                    }
-                });
-                var boundLabel = new Label
-                {
-                    text = $"{binding.Target.Component.GetType()} - {binding.Target.Path}"
-                };
+                row1Container.Add(new Label("Target:") { style = { minWidth = 100 } });
+                var boundLabel = new Label { text = $"{binding.Target.Component.GetType()} - {binding.Target.Path}" };
                 row1Container.Add(boundLabel);
 
                 var row2Container = new VisualElement
                 {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                        overflow = Overflow.Hidden,
-                        marginBottom = 4
-                    }
+                    style = { flexDirection = FlexDirection.Row, overflow = Overflow.Hidden, marginBottom = 4 }
                 };
-                row2Container.Add(new Label("Type:")
-                {
-                    style =
-                    {
-                        minWidth = 100
-                    }
-                });
+                row2Container.Add(new Label("Type:") { style = { minWidth = 100 } });
                 var boundTypeLabel = new Label
                 {
-                    text = $"{binding.Target.Type}",
-                    style =
-                    {
-                        textOverflow = TextOverflow.Ellipsis,
-                    }
+                    text = $"{binding.Target.Type}", style = { textOverflow = TextOverflow.Ellipsis, }
                 };
                 row2Container.Add(boundTypeLabel);
 

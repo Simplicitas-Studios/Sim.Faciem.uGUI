@@ -7,7 +7,7 @@ namespace Sim.Faciem.uGUI.Editor
 {
     public static class BindablePropertyElement
     {
-        public static readonly Color BindingAccentColor = new(87/255f, 133/255f, 217/255f, 1);
+        public static readonly Color BindingAccentColor = new(87 / 255f, 133 / 255f, 217 / 255f, 1);
         public static readonly Color BackgroundColor = new(80 / 255f, 80 / 255f, 80 / 255f, 1);
 
         public static VisualElement CreateElement(IBindableProperty bindableProperty)
@@ -38,21 +38,8 @@ namespace Sim.Faciem.uGUI.Editor
                 }
             };
 
-            var row1Container = new VisualElement
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Row,
-                    marginBottom = 4
-                }
-            };
-            row1Container.Add(new Label("Bound to: ")
-            {
-                style =
-                {
-                    minWidth = 100
-                }
-            });
+            var row1Container = new VisualElement { style = { flexDirection = FlexDirection.Row, marginBottom = 4 } };
+            row1Container.Add(new Label("Bound to: ") { style = { minWidth = 100 } });
             var dataSourceLink = new HyperLinkLabel
             {
                 LinkIds = new List<string> { "1" },
@@ -61,36 +48,19 @@ namespace Sim.Faciem.uGUI.Editor
                 LinkHoverColor = BindingAccentColor,
                 LinkColor = Color.white,
                 pickingMode = PickingMode.Position,
-                style =
-                {
-                    flexGrow = 1
-                },
-                text = $"<link=\"1\">{bindableProperty.BindingInfo.DataSource.name} - {bindableProperty.BindingInfo.DataSource.GetType().Name}<link>"
+                style = { flexGrow = 1 },
+                text =
+                    $"<link=\"1\">{bindableProperty.BindingInfo.DataSource.name} - {bindableProperty.BindingInfo.DataSource.GetType().Name}<link>"
             };
             row1Container.Add(dataSourceLink);
 
             runtimeInfoContainer.Add(row1Container);
 
-            var row2Container = new VisualElement
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Row
-                }
-            };
-            row2Container.Add(new Label("Path: ")
-            {
-                style =
-                {
-                    minWidth = 100
-                }
-            });
+            var row2Container = new VisualElement { style = { flexDirection = FlexDirection.Row } };
+            row2Container.Add(new Label("Path: ") { style = { minWidth = 100 } });
             row2Container.Add(new Label(bindableProperty.BindingInfo.PropertyPath.ToString())
             {
-                style =
-                {
-                    flexGrow = 1
-                }
+                style = { flexGrow = 1 }
             });
             runtimeInfoContainer.Add(row2Container);
 

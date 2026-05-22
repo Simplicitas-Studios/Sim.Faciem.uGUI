@@ -6,12 +6,12 @@
   "unity": "6000.0",
   "dependencies": {
     "com.sim.faciem": "1.0.0-alpha.1"
- },
- "keywords": [
+  },
+  "keywords": [
     "Unity",
     "Simplicitas",
-	"Faciem",
-	"uGUI"
+    "Faciem",
+    "uGUI"
   ],
   "author": {
     "name": "Simplicitas-Studios",

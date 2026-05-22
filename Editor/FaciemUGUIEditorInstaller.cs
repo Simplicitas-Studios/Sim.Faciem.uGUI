@@ -6,7 +6,7 @@ namespace Sim.Faciem.uGUI.Editor
     {
         public override void Install(IEditorInjector injector)
         {
-            injector.Register<IBindingManipulationProvider, BindingManipulationProvider>();   
+            injector.Register<IBindingManipulationProvider, BindingManipulationProvider>();
         }
     }
 }

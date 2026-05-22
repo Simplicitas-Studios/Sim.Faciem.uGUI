@@ -7,8 +7,9 @@ namespace Sim.Faciem.uGUI
     public class SimGenericRuntimeBinding : IDisposable
     {
         private readonly IDisposable _subscription;
-        
-        public SimGenericRuntimeBinding(Observable<object> propertyChange, Component target, Action<object, object> setter, SimPropertyPath propertyPath)
+
+        public SimGenericRuntimeBinding(Observable<object> propertyChange, Component target,
+            Action<object, object> setter, SimPropertyPath propertyPath)
         {
             _subscription = propertyChange
                 .Subscribe(value =>

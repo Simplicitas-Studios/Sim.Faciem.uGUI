@@ -24,6 +24,7 @@ namespace Sim.Faciem.uGUI.Editor
                         // reached the end
                         break;
                     }
+
                     if (propertyPaths.Length > index + 1 && Regex.IsMatch(propertyPaths[index + 1], "^data\\[\\d+\\]$"))
                     {
                         var match = Regex.Match(propertyPaths[index + 1], "^data\\[(\\d+)\\]$");

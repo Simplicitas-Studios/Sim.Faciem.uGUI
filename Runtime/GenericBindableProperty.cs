@@ -7,11 +7,11 @@ namespace Sim.Faciem.uGUI
     public class GenericBindableProperty : IBindableProperty, IDisposable
     {
         public SimComponentPropertyPath Target;
-        
+
         public SimBindingInfo BindingInfo;
 
         internal SimGenericRuntimeBinding RuntimeBinding;
-        
+
         public Type BoundType => Type.GetType(Target.Type);
 
         SimBindingInfo IBindableProperty.BindingInfo
@@ -19,7 +19,7 @@ namespace Sim.Faciem.uGUI
             get => BindingInfo;
             set => BindingInfo = value;
         }
-        
+
         public void CreateBinding()
         {
             RuntimeBinding ??= SimBindingFactory.CreateGenericBinding(this);

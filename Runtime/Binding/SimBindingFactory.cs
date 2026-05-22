@@ -9,7 +9,7 @@ namespace Sim.Faciem.uGUI.Binding
     {
         private static readonly SimObservablePropertyPathVisitor s_observablePathVisitor = new();
         private static readonly SimPropertyPathVisitor s_propertyPathVisitor = new();
-        
+
         public static SimDataBinding<T> CreateBinding<T>(SimBindingInfo bindingInfo)
         {
             if (bindingInfo.BindingType == BindingType.BindToUI)
@@ -19,7 +19,7 @@ namespace Sim.Faciem.uGUI.Binding
                 var propertyPathParts = propertyPath.ExtractPaths();
 
                 Observable<object> propertyChanges = null;
-                
+
                 foreach (var simPropertyPathPart in propertyPathParts)
                 {
                     if (simPropertyPathPart.Kind == SimPropertyPathPartKind.Observable)
@@ -32,7 +32,7 @@ namespace Sim.Faciem.uGUI.Binding
                                 Debug.LogError("Could not evaluate observable property path");
                                 return null;
                             }
-                            
+
                             var getter = s_observablePathVisitor.PropertyGetter;
                             s_observablePathVisitor.Reset();
                             propertyChanges = getter(bindingInfo.DataSource);
@@ -55,9 +55,9 @@ namespace Sim.Faciem.uGUI.Binding
                                         getter = s_observablePathVisitor.PropertyGetter;
                                         s_observablePathVisitor.Reset();
                                     }
-                                    
+
                                     var observable = getter(subDataSource);
-                                    
+
                                     return observable;
                                 })
                                 .Switch();
@@ -70,11 +70,11 @@ namespace Sim.Faciem.uGUI.Binding
                         {
                             continue;
                         }
-                        
+
                         if (propertyChanges != null)
                         {
                             Func<object, object> getter = null;
-                            
+
                             propertyChanges = propertyChanges
                                 .Where(dataSource => dataSource != null)
                                 .Select(dataSource =>
@@ -92,13 +92,13 @@ namespace Sim.Faciem.uGUI.Binding
                                         s_propertyPathVisitor.Reset();
                                     }
 
-                                    var value =  getter(dataSource);
+                                    var value = getter(dataSource);
 
                                     foreach (var simConverterBaseBehaviour in bindingInfo.Converters)
                                     {
                                         value = simConverterBaseBehaviour.Convert(value);
                                     }
-                                    
+
                                     return value;
                                 });
                         }
@@ -109,13 +109,13 @@ namespace Sim.Faciem.uGUI.Binding
                 {
                     return new SimOneWayToUIBinding<T>(Observable.Never<T>());
                 }
-                
+
                 var obs = propertyChanges
                     .OfType<object, T>();
-                
+
                 return new SimOneWayToUIBinding<T>(obs);
             }
-            
+
             return null;
         }
 
@@ -129,7 +129,7 @@ namespace Sim.Faciem.uGUI.Binding
                 Debug.LogError("Cannot set value to an observable property");
                 return null;
             }
-            
+
             s_propertyPathVisitor.Path = parts[0].Path;
             var targetComponent = genericBindableProperty.Target.Component;
             if (!PropertyContainer.TryAccept(s_propertyPathVisitor, ref targetComponent))
@@ -141,7 +141,8 @@ namespace Sim.Faciem.uGUI.Binding
             var setter = s_propertyPathVisitor.Setter;
             s_propertyPathVisitor.Reset();
 
-            return new SimGenericRuntimeBinding(sourceBinding.Value, targetComponent, setter, genericBindableProperty.Target.PropertyPath);
+            return new SimGenericRuntimeBinding(sourceBinding.Value, targetComponent, setter,
+                genericBindableProperty.Target.PropertyPath);
         }
     }
 }

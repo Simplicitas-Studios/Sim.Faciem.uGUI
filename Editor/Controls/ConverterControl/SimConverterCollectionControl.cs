@@ -49,6 +49,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                 {
                     return;
                 }
+
                 _currentInputType = value;
                 EvaluateChain();
             }
@@ -92,39 +93,35 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
             }
         }
 
-
         public SimConverterCollectionControl()
         {
-            _chainIssues= new ReactiveProperty<List<bool>>();
+            _chainIssues = new ReactiveProperty<List<bool>>();
             _converters = new List<SimConverterBaseBehaviour>();
             Add(new Label("Converters"));
 
             _itemContainer = new VisualElement();
             Add(_itemContainer);
-            
+
             _btAddConverter = new Button(() =>
             {
                 _converters.Add(null);
                 EvaluateChain();
                 ReBuildItems();
-            })
-            {
-                text = "Add Converter"
-            };
+            }) { text = "Add Converter" };
             Add(_btAddConverter);
         }
 
         private void EvaluateChain()
         {
             var chainIssues = new List<bool>();
-            
+
             if (string.IsNullOrEmpty(OutputType))
             {
                 HasConverterChainIssues = true;
                 _chainIssues.Value = chainIssues;
                 return;
             }
-            
+
             var requiredEndType = Type.GetType(OutputType);
 
             if (requiredEndType == null)
@@ -144,7 +141,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
 
             Type expectedInputType = null;
             Type nextRequiredType = null;
-            
+
             foreach (var converter in _converters)
             {
                 if (converter == null)
@@ -166,7 +163,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                     ExpectedInputType = expectedInputType.AssemblyQualifiedName;
                     continue;
                 }
-                
+
                 if (!nextRequiredType.IsAssignableFrom(fromType))
                 {
                     chainIssues.Add(true);
@@ -177,16 +174,16 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                     nextRequiredType = toType;
                 }
             }
-            
+
             // The last conversion has to result into the required end type
             chainIssues.Add(!requiredEndType.IsAssignableFrom(nextRequiredType));
-            
+
             var maybeInputType = Maybe.Nothing<Type>();
-            
-            if (!string.IsNullOrEmpty(CurrentInputType) )
+
+            if (!string.IsNullOrEmpty(CurrentInputType))
             {
                 var currentInputType = Type.GetType(CurrentInputType);
-                
+
                 if (currentInputType != null)
                 {
                     maybeInputType = currentInputType;
@@ -196,14 +193,14 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
             var inputMatches = maybeInputType
                 .Map<bool>(type => type.IsAssignableFrom(expectedInputType))
                 .OrElse(true);
-            
+
             // The first converter input must match the current input type if available
             chainIssues[0] = chainIssues[0] || !inputMatches;
-            
+
             HasConverterChainIssues = chainIssues.Any(issue => issue);
             _chainIssues.Value = chainIssues;
         }
-        
+
         private void ReBuildItems()
         {
             _itemContainer.Clear();
@@ -211,51 +208,27 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
             for (var index = 0; index < Converters.Count; index++)
             {
                 var converter = Converters[index];
-                var itemRoot = new VisualElement
-                {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                    }
-                };
+                var itemRoot = new VisualElement { style = { flexDirection = FlexDirection.Row, } };
                 var disposables = itemRoot.RegisterDisposableBag();
 
-                var itemContentContainer = new VisualElement
-                {
-                    style =
-                    {
-                        flexGrow = 1
-                    }
-                };
-                
-                var objectField = new ObjectField
-                {
-                    objectType = typeof(SimConverterBaseBehaviour)
-                };
+                var itemContentContainer = new VisualElement { style = { flexGrow = 1 } };
+
+                var objectField = new ObjectField { objectType = typeof(SimConverterBaseBehaviour) };
 
                 itemContentContainer.Add(objectField);
 
-                var conversionInfo = new Label
-                {
-                    style =
-                    {
-                        unityTextAlign = TextAnchor.MiddleCenter
-                    }
-                };
+                var conversionInfo = new Label { style = { unityTextAlign = TextAnchor.MiddleCenter } };
                 itemContentContainer.Add(conversionInfo);
 
                 var storedIndex = index;
-                
+
                 var removeButton = new Button(() =>
                 {
                     _converters.Remove(converter);
                     EvaluateChain();
                     _itemContainer.Remove(itemRoot);
-                })
-                {
-                    text = "-"
-                };
-                
+                }) { text = "-" };
+
                 itemRoot.Add(itemContentContainer);
                 itemRoot.Add(removeButton);
 
@@ -281,7 +254,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                             _converters[storedIndex] = null;
                         }
                     }));
-                
+
                 disposables.Add(_chainIssues
                     .Where(chain => chain != null)
                     .Subscribe(chainIssueList =>
@@ -301,8 +274,8 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
         {
             from = null;
             to = null;
-            
-            if (converterType.BaseType is { IsGenericType: true } baseConverterType 
+
+            if (converterType.BaseType is { IsGenericType: true } baseConverterType
                 && baseConverterType.GetGenericTypeDefinition() == typeof(SimConverterBehaviour<,>))
             {
                 var genericArguments = baseConverterType.GetGenericArguments();

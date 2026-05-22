@@ -9,7 +9,7 @@ namespace Sim.Faciem.uGUI
         public Component Component;
 
         public string Path;
-        
+
         public string Type;
 
         public SimPropertyPath PropertyPath
@@ -17,7 +17,7 @@ namespace Sim.Faciem.uGUI
             get => new(Path);
             set => Path = value.Path.ToString();
         }
-        
+
         public bool Equals(SimComponentPropertyPath other)
         {
             return Equals(Component, other.Component) && PropertyPath.Equals(other.PropertyPath) && Type == other.Type;

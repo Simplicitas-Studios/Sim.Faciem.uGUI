@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
@@ -51,5 +50,4 @@ namespace Sim.Faciem.uGUI.Editor.Controls
             _treeView.OnGUI(rect);
         }
     }
-
 }

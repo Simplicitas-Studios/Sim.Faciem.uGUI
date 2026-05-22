@@ -1,8 +1,7 @@
-﻿
-
-using TMPro;
+﻿using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
+
 #else
 using UnityEngine;
 #endif
@@ -25,7 +24,7 @@ namespace Sim.Faciem.uGUI
                     tmp.SetText(tmp.text);
                 }
             }));
-            
+
             SimGenericBindingPostApply.RegisterPostApplyAction<TextMeshPro>(((o, path) =>
             {
                 if (o is TextMeshPro tmp)

@@ -6,10 +6,11 @@ namespace Sim.Faciem.uGUI.Binding
     public class SimPropertyPathVisitor : PathVisitor
     {
         public Func<object, object> Getter { get; private set; }
-        
+
         public Action<object, object> Setter { get; private set; }
-        
-        protected override void VisitPath<TContainer, TValue>(Property<TContainer, TValue> property, ref TContainer container, ref TValue value)
+
+        protected override void VisitPath<TContainer, TValue>(Property<TContainer, TValue> property,
+            ref TContainer container, ref TValue value)
         {
             Getter = source =>
             {
@@ -24,7 +25,7 @@ namespace Sim.Faciem.uGUI.Binding
                 var typedValue = value == null
                     ? default
                     : (TValue)value;
-                
+
                 property.SetValue(ref typed, typedValue);
             };
         }

@@ -16,9 +16,9 @@ namespace Sim.Faciem.uGUI
         private SerializableReactiveProperty<T> _value;
 
         public SimBindingInfo BindingInfo;
-        
-        public T Value { get =>  _value.Value; set => _value.Value = value; }
-        
+
+        public T Value { get => _value.Value; set => _value.Value = value; }
+
         public void CreateBinding()
         {
             if (RuntimeBinding == null)
@@ -30,7 +30,7 @@ namespace Sim.Faciem.uGUI
             }
         }
 
-        public Observable<T> ObserveChanges() => _value; 
+        public Observable<T> ObserveChanges() => _value;
 
         Type IBindableProperty.BoundType => typeof(T);
 

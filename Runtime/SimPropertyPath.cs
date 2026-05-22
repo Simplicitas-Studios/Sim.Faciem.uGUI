@@ -7,14 +7,14 @@ namespace Sim.Faciem.uGUI
     public readonly struct SimPropertyPath : IEquatable<SimPropertyPath>
     {
         private const string SubscriptionSymbol = "$";
-        
+
         public PropertyPath Path { get; }
-        
-        public SimPropertyPath(string path) 
+
+        public SimPropertyPath(string path)
             : this(new PropertyPath(path))
         {
         }
-        
+
         public SimPropertyPath(PropertyPath path)
         {
             Path = path;
@@ -27,9 +27,9 @@ namespace Sim.Faciem.uGUI
 
         public static SimPropertyPath AppendSubscription(SimPropertyPath path)
         {
-            return new SimPropertyPath(PropertyPath.Combine(path.Path,SubscriptionSymbol));
+            return new SimPropertyPath(PropertyPath.Combine(path.Path, SubscriptionSymbol));
         }
-        
+
         public SimPropertyPathPart[] ExtractPaths()
         {
             var pathString = Path.ToString();
@@ -38,7 +38,7 @@ namespace Sim.Faciem.uGUI
 
             return pathParts
                 .Select(RemoveStartingDots)
-                .Select((x, index) => new SimPropertyPathPart(new PropertyPath(x), index +1 == pathParts.Length 
+                .Select((x, index) => new SimPropertyPathPart(new PropertyPath(x), index + 1 == pathParts.Length
                     ? SimPropertyPathPartKind.Property
                     : SimPropertyPathPartKind.Observable))
                 .ToArray();

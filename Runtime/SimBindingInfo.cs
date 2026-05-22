@@ -12,11 +12,11 @@ namespace Sim.Faciem.uGUI
         private string _propertyPath;
 
         public BindingType BindingType;
-        
+
         public SimDataSourceMonoBehaviour DataSource;
 
         public List<SimConverterBaseBehaviour> Converters;
-        
+
         public SimPropertyPath PropertyPath
         {
             get => new(_propertyPath);
