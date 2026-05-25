@@ -148,6 +148,7 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
 
             _manipulationProvider.BindableProperty.CurrentValue.BindingInfo = newBindingInfo;
             _manipulationProvider.BindableProperty.ForceNotify();
+            EditorUtility.SetDirty(_manipulationProvider.BindableProperty.Value.BindingInfo.DataSource.gameObject);
             CloseWindow();
         }
 
