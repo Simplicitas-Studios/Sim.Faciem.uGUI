@@ -59,8 +59,10 @@ namespace Sim.Faciem.uGUI.Editor
                     else
                     {
                         var binding = bindingComponent.Bindings
-                                .FirstOrDefault(x => x.Target.Equals(s_lastPropertyTarget.Value)) ??
-                            new GenericBindableProperty { Target = s_lastPropertyTarget.Value };
+                            .FirstOrDefault(x => x.Target.Equals(s_lastPropertyTarget.Value)) ?? new GenericBindableProperty
+                        {
+                            Target = s_lastPropertyTarget.Value
+                        };
 
                         binding.BindingInfo = propertyChanged.BindingInfo;
                         bindingComponent.Bindings.Add(binding);
@@ -101,8 +103,7 @@ namespace Sim.Faciem.uGUI.Editor
                     {
                         menu.AddItem(new GUIContent("Remove Binding"), false, () =>
                         {
-                            var bindingInfo =
-                                parentProperty.FindPropertyRelative(nameof(IBindableProperty.BindingInfo));
+                            var bindingInfo = parentProperty.FindPropertyRelative(nameof(IBindableProperty.BindingInfo));
                             bindingInfo.boxedValue = default(SimBindingInfo);
                             bindingInfo.serializedObject.ApplyModifiedProperties();
                             EditorUtility.SetDirty(bindingInfo.serializedObject.targetObject);
@@ -142,6 +143,18 @@ namespace Sim.Faciem.uGUI.Editor
                     bindingWindow.Show();
                 });
             }
+        }
+
+        public static void EditBinding(IBindableProperty bindableProperty, SerializedProperty property)
+        {
+            s_lastPropertyTarget = Maybe.Nothing<SimComponentPropertyPath>();
+            s_lastProperty = property;
+            s_ignoreSelf = true;
+            s_bindingManipulationProvider.BindableProperty.Value = bindableProperty;
+            s_bindingManipulationProvider.BindableProperty.ForceNotify();
+            s_ignoreSelf = false;
+            var bindingWindow = EditorWindow.GetWindow<BindingWindow.BindingWindow>();
+            bindingWindow.Show();
         }
 
         public static void EditBinding(GenericBindableProperty bindableProperty, SerializedProperty property)

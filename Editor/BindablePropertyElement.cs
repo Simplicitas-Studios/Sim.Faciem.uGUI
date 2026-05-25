@@ -43,14 +43,14 @@ namespace Sim.Faciem.uGUI.Editor
             var dataSourceLink = new HyperLinkLabel
             {
                 LinkIds = new List<string> { "1" },
-                InstanceIds = new List<int> { bindableProperty.BindingInfo.DataSource.GetInstanceID() },
+                InstanceIds = new List<int> { bindableProperty.BindingInfo.DataSource?.GetInstanceID() ?? -1 },
                 focusable = true,
                 LinkHoverColor = BindingAccentColor,
                 LinkColor = Color.white,
                 pickingMode = PickingMode.Position,
                 style = { flexGrow = 1 },
                 text =
-                    $"<link=\"1\">{bindableProperty.BindingInfo.DataSource.name} - {bindableProperty.BindingInfo.DataSource.GetType().Name}<link>"
+                    $"<link=\"1\">{bindableProperty.BindingInfo.DataSource?.name} - {bindableProperty.BindingInfo.DataSource?.GetType().Name}<link>"
             };
             row1Container.Add(dataSourceLink);
 
