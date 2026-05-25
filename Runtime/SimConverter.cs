@@ -1,6 +1,6 @@
 ﻿namespace Sim.Faciem.uGUI
 {
-    public abstract class SimConverterBehaviour<TFrom, TTo> : SimConverterBaseBehaviour
+    public abstract class SimConverter<TFrom, TTo> : SimConverterBase
     {
         internal sealed override object Convert(object obj)
         {

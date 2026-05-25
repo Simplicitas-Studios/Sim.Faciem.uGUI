@@ -20,7 +20,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
         private readonly ReactiveProperty<List<bool>> _chainIssues;
 
         private string _outputType;
-        private List<SimConverterBaseBehaviour> _converters;
+        private List<SimConverterBase> _converters;
         private bool _hasConverterChainIssues;
         private string _expectedInputType;
         private string _currentInputType;
@@ -70,7 +70,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
 
         [UxmlAttribute]
         [CreateProperty]
-        public List<SimConverterBaseBehaviour> Converters
+        public List<SimConverterBase> Converters
         {
             get => _converters;
             set
@@ -96,7 +96,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
         public SimConverterCollectionControl()
         {
             _chainIssues = new ReactiveProperty<List<bool>>();
-            _converters = new List<SimConverterBaseBehaviour>();
+            _converters = new List<SimConverterBase>();
             Add(new Label("Converters"));
 
             _itemContainer = new VisualElement();
@@ -213,7 +213,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
 
                 var itemContentContainer = new VisualElement { style = { flexGrow = 1 } };
 
-                var objectField = new ObjectField { objectType = typeof(SimConverterBaseBehaviour) };
+                var objectField = new ObjectField { objectType = typeof(SimConverterBase) };
 
                 itemContentContainer.Add(objectField);
 
@@ -236,7 +236,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                     .Prepend(converter)
                     .Subscribe(newValue =>
                     {
-                        if (newValue is SimConverterBaseBehaviour converterBehaviour)
+                        if (newValue is SimConverterBase converterBehaviour)
                         {
                             conversionInfo.style.display = DisplayStyle.Flex;
 
@@ -276,7 +276,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
             to = null;
 
             if (converterType.BaseType is { IsGenericType: true } baseConverterType
-                && baseConverterType.GetGenericTypeDefinition() == typeof(SimConverterBehaviour<,>))
+                && baseConverterType.GetGenericTypeDefinition() == typeof(SimConverter<,>))
             {
                 var genericArguments = baseConverterType.GetGenericArguments();
                 from = genericArguments[0];

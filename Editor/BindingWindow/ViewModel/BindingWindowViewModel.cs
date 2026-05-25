@@ -17,13 +17,13 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
         private string _propertyPath;
         private string _dataSourceType = string.Empty;
         private string _requiredPropertyType;
-        private List<SimConverterBaseBehaviour> _converters = new();
+        private List<SimConverterBase> _converters = new();
         private bool _hasConverterChainError;
         private string _requiredBindingInputType;
         private string _currentBindingInputType;
 
         [CreateProperty]
-        public List<SimConverterBaseBehaviour> Converters
+        public List<SimConverterBase> Converters
         {
             get => _converters;
             set => SetProperty(ref _converters, value);
@@ -123,7 +123,7 @@ namespace Sim.Faciem.uGUI.Editor.BindingWindow.ViewModel
                     DataSource = bindableProperty?.BindingInfo.DataSource;
                     PropertyPath = bindableProperty?.BindingInfo.PropertyPath.ToString();
                     RequiredPropertyType = bindableProperty?.BoundType?.AssemblyQualifiedName ?? string.Empty;
-                    Converters = bindableProperty?.BindingInfo.Converters ?? new List<SimConverterBaseBehaviour>();
+                    Converters = bindableProperty?.BindingInfo.Converters ?? new List<SimConverterBase>();
                 }));
         }
 

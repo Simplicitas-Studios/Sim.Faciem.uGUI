@@ -15,7 +15,7 @@ namespace Sim.Faciem.uGUI
 
         public SimDataSourceMonoBehaviour DataSource;
 
-        public List<SimConverterBaseBehaviour> Converters;
+        public List<SimConverterBase> Converters;
 
         public SimPropertyPath PropertyPath
         {

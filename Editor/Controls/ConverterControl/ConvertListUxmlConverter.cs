@@ -3,11 +3,11 @@ using UnityEditor.UIElements;
 
 namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
 {
-    public class ConvertListUxmlConverter : UxmlAttributeConverter<List<SimConverterBaseBehaviour>>
+    public class ConvertListUxmlConverter : UxmlAttributeConverter<List<SimConverterBase>>
     {
-        public override List<SimConverterBaseBehaviour> FromString(string value)
+        public override List<SimConverterBase> FromString(string value)
         {
-            return new List<SimConverterBaseBehaviour>();
+            return new List<SimConverterBase>();
         }
     }
 }
