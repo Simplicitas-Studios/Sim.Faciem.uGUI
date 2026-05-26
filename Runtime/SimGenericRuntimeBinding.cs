@@ -22,7 +22,7 @@ namespace Sim.Faciem.uGUI
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Error for binding at {target.transform.GetTransformPath()} for property path {propertyPath}:\n{e}");
+                        Debug.LogError($"Error for binding at {target.transform.GetTransformPath()} for property path {propertyPath}:\n{e.Message}\n{e.StackTrace}");
                     }
                 });
         }

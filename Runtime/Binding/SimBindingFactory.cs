@@ -68,6 +68,28 @@ namespace Sim.Faciem.uGUI.Binding
                     {
                         if (simPropertyPathPart.Path.IsEmpty)
                         {
+                            // If the property path is empty, then the path ended at a $, which mean the subscribed
+                            // value is already the target value, so we can skip trying to evaluate the property path and just apply converters if there are any
+                            propertyChanges = propertyChanges?
+                                .Where(currentValue => currentValue != null)
+                                .Select(currentValue =>
+                                {
+                                    var value = currentValue;
+
+                                    foreach (var simConverterBaseBehaviour in bindingInfo.Converters)
+                                    {
+                                        try
+                                        {
+                                            value = simConverterBaseBehaviour.Convert(value);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Debug.LogError($"Error in Converter for Binding {bindingInfo.DataSource.gameObject.name} to {bindingInfo.PropertyPath.ToString()}: {e.Message}\n{e.StackTrace}");
+                                        }
+                                    }
+
+                                    return value;
+                                });
                             continue;
                         }
 
