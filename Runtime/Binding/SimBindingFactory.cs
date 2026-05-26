@@ -96,7 +96,14 @@ namespace Sim.Faciem.uGUI.Binding
 
                                     foreach (var simConverterBaseBehaviour in bindingInfo.Converters)
                                     {
-                                        value = simConverterBaseBehaviour.Convert(value);
+                                        try
+                                        {
+                                            value = simConverterBaseBehaviour.Convert(value);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Debug.LogError($"Error in Converter for Binding {bindingInfo.DataSource.gameObject.name} to {bindingInfo.PropertyPath.ToString()}: {e.Message}\n{e.StackTrace}");
+                                        }
                                     }
 
                                     return value;

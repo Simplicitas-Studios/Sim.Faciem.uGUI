@@ -1,5 +1,6 @@
 ﻿using System;
 using R3;
+using Sim.Faciem.uGUI.Internal;
 using UnityEngine;
 
 namespace Sim.Faciem.uGUI
@@ -14,8 +15,15 @@ namespace Sim.Faciem.uGUI
             _subscription = propertyChange
                 .Subscribe(value =>
                 {
-                    setter(target, value);
-                    SimGenericBindingPostApply.PostApply(target, propertyPath);
+                    try
+                    {
+                        setter(target, value);
+                        SimGenericBindingPostApply.PostApply(target, propertyPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Error for binding at {target.transform.GetTransformPath()} for property path {propertyPath}:\n{e}");
+                    }
                 });
         }
 
