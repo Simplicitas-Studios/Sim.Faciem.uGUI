@@ -8,6 +8,7 @@ using R3;
 using Unity.Properties;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.Search;
 using UnityEngine.UIElements;
 
 namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
@@ -213,7 +214,20 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
 
                 var itemContentContainer = new VisualElement { style = { flexGrow = 1 } };
 
-                var objectField = new ObjectField { objectType = typeof(SimConverterBase) };
+                var searchContext = SearchService.CreateContext("converter_base:SimConverterBase");
+                // Create the SearchViewFlags for our object selector. We want it to show as a borderless window, in grid view and without the ability to show the saved search queries.
+                var searchViewFlags = SearchViewFlags.Borderless | SearchViewFlags.GridView | SearchViewFlags.DisableSavedSearchQuery;
+
+                // Create the SearchViewState of our object selector.
+                var searchViewState = new SearchViewState(searchContext, searchViewFlags);
+
+                var objectField = new ObjectField
+                {
+                    objectType = typeof(SimConverterBase),
+                    searchContext = searchContext,
+                    searchViewFlags = searchViewFlags,
+                    searchViewState = searchViewState
+                };
 
                 itemContentContainer.Add(objectField);
 
