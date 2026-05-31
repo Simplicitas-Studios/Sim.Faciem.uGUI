@@ -1,6 +1,6 @@
 ﻿using System;
-using Plugins.Sim.Faciem.Shared;
 using R3;
+using Sim.Faciem.Shared;
 using Sim.Faciem.uGUI.Binding;
 using UnityEngine;
 

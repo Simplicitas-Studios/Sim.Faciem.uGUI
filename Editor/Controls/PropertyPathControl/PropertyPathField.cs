@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Plugins.Sim.Faciem.Shared;
 using R3;
+using Sim.Faciem.Shared;
 using Sim.Faciem.uGUI.Editor.Internal;
 using Unity.Properties;
 using UnityEngine;
