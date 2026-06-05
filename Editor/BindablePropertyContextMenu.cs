@@ -2,6 +2,7 @@
 using Bebop.Monads;
 using Plugins.Sim.Faciem.Editor.DI;
 using R3;
+using Sim.Faciem.uGUI.Bridges;
 using Sim.Faciem.uGUI.Editor.Internal;
 using UnityEditor;
 using UnityEngine;
@@ -76,6 +77,87 @@ namespace Sim.Faciem.uGUI.Editor
         private static void OnContextualPropertyMenu(GenericMenu menu, SerializedProperty property)
         {
             s_lastPropertyTarget = Maybe.Nothing<SimComponentPropertyPath>();
+
+            var targetObjectType = property.serializedObject.targetObject.GetType();
+
+            if(property.serializedObject.targetObject is Component targetComponent
+               && BindingBridgeRegistry.IsBindingBridge(targetObjectType))
+            {
+
+                if (!BindingBridgeRegistry.TryResolveBindingBridge(targetObjectType, targetComponent, out var bridge))
+                {
+                    Debug.LogWarning("Could not add Bindable Bridge!");
+                    return;
+                }
+
+                if (!bridge.TryGetBindableProperty(property.propertyPath, out var bindableProperty))
+                {
+                    if (bridge.ActivatedProperties.All(isActive => !isActive))
+                    {
+                        Object.DestroyImmediate(bridge);
+                    }
+                    return;
+                }
+
+                var allBindableProperties = bridge.CollectBindableProperties()
+                    .ToList();
+
+                if (bridge.ActivatedProperties.All(isActive => !isActive))
+                {
+                    Object.DestroyImmediate(bridge);
+                }
+
+                var propertyIndex = allBindableProperties.IndexOf(bindableProperty);
+
+                if (!bridge.ActivatedProperties[propertyIndex])
+                {
+                    menu.AddItem(new GUIContent("Add in Bindable Bridge"), false, () =>
+                    {
+                        if (!BindingBridgeRegistry.TryResolveBindingBridge(targetObjectType, targetComponent, out bridge))
+                        {
+                            Debug.LogWarning("Could not add Bindable Bridge!");
+                            return;
+                        }
+
+
+                        if (propertyIndex >= 0)
+                        {
+                            bridge.ActivatedProperties[propertyIndex] = true;
+                            EditorUtility.SetDirty(bridge);
+                        }
+                    });
+                }
+                else
+                {
+                    menu.AddItem(new GUIContent("Remove in Bindable Bridge"), false, () =>
+                    {
+                        if (!BindingBridgeRegistry.TryResolveBindingBridge(targetObjectType, targetComponent, out bridge))
+                        {
+                            Debug.LogWarning("Could not add Bindable Bridge!");
+                            return;
+                        }
+
+                        if (propertyIndex >= 0)
+                        {
+                            bridge.ActivatedProperties[propertyIndex] = false;
+                            bindableProperty.BindingInfo = default;
+
+                            if (bridge.ActivatedProperties.All(isActive => !isActive))
+                            {
+                                Object.DestroyImmediate(bridge);
+                            }
+                            else
+                            {
+                                EditorUtility.SetDirty(bridge);
+                            }
+                        }
+                    });
+                }
+
+
+                return;
+            }
+
             if (property.name == "value")
             {
                 // The serialized field is the value from SerializableReactiveProperty, we have to move up two parents

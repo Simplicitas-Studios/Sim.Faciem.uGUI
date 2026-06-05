@@ -1,4 +1,5 @@
-﻿using Sim.Faciem.uGUI.Editor.Internal;
+﻿using System;
+using Sim.Faciem.uGUI.Editor.Internal;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -35,12 +36,22 @@ namespace Sim.Faciem.uGUI.Editor
             };
             root.Add(bindingIcon);
 
-            root.schedule.Execute(() => bindingIcon.style.display = property.boxedValue is IBindableProperty
+            root.schedule.Execute(() =>
                 {
-                    BindingInfo: { IsDefault: true }
-                }
-                    ? DisplayStyle.None
-                    : DisplayStyle.Flex)
+                    try
+                    {
+                        bindingIcon.style.display = property?.boxedValue is IBindableProperty
+                        {
+                            BindingInfo: { IsDefault: true }
+                        }
+                            ? DisplayStyle.None
+                            : DisplayStyle.Flex;
+                    }
+                    catch (Exception)
+                    {
+                        // Swallow
+                    }
+                })
                 .Every(200);
 
             if (valueProperty.hasChildren)
