@@ -4,6 +4,7 @@ using System.Linq;
 using R3;
 using Sim.Faciem.uGUI.Editor.Controls;
 using Unity.Properties;
+using UnityEngine.UIElements;
 
 namespace Sim.Faciem.uGUI.Editor.Internal
 {
@@ -70,7 +71,7 @@ namespace Sim.Faciem.uGUI.Editor.Internal
 
         public static bool HasProperties(Type type)
         {
-            if (type == null)
+            if (type == null || type == typeof(VisualTreeAsset))
             {
                 return false;
             }
