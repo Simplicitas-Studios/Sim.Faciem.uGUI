@@ -13,8 +13,15 @@ namespace Sim.Faciem.uGUI.Editor.Search
             if (context.target is not SimConverterBase)
                 return;
 
-            indexer.IndexProperty<string, Shader>(context.documentIndex, "converter_base", nameof(SimConverterBase), false);
+            #if UNITY_6000_3_OR_NEWER
+            
+            indexer.IndexProperty<string, SimConverterBase>(context.documentIndex, "converter_base", nameof(SimConverterBase), false);
 
+            #elif UNITY_6000_0_OR_NEWER
+            
+            indexer.IndexProperty<string, SimConverterBase>(context.documentIndex, "converter_base", nameof(SimConverterBase), false, true);
+            
+            #endif
         }
     }
 }

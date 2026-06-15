@@ -218,6 +218,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                 // Create the SearchViewFlags for our object selector. We want it to show as a borderless window, in grid view and without the ability to show the saved search queries.
                 var searchViewFlags = SearchViewFlags.Borderless | SearchViewFlags.GridView | SearchViewFlags.DisableSavedSearchQuery;
 
+                
                 // Create the SearchViewState of our object selector.
                 var searchViewState = new SearchViewState(searchContext, searchViewFlags);
 
@@ -226,7 +227,9 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
                     objectType = typeof(SimConverterBase),
                     searchContext = searchContext,
                     searchViewFlags = searchViewFlags,
+                    #if UNITY_6000_3_OR_NEWER
                     searchViewState = searchViewState
+                    #endif
                 };
 
                 itemContentContainer.Add(objectField);
