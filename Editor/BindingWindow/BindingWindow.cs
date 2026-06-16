@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using Plugins.Sim.Faciem.Editor;
+using Sim.Faciem.Editor;
 using UnityEngine;
 
 namespace Sim.Faciem.uGUI.Editor.BindingWindow

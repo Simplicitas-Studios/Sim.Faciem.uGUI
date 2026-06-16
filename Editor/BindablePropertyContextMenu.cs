@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Bebop.Monads;
-using Plugins.Sim.Faciem.Editor.DI;
 using R3;
+using Sim.Faciem.Editor.DI;
 using Sim.Faciem.uGUI.Bridges;
 using Sim.Faciem.uGUI.Editor.Internal;
 using UnityEditor;

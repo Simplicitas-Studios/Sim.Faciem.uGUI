@@ -1,4 +1,4 @@
-﻿using Plugins.Sim.Faciem.Editor.DI;
+﻿using Sim.Faciem.Editor.DI;
 
 namespace Sim.Faciem.uGUI.Editor
 {
