@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bebop.Monads;
 using JetBrains.Annotations;
 using R3;
+using Sim.Dispositio.Shared;
 using Sim.Faciem.Shared;
+using Sim.Utility;
 using Unity.Properties;
 using UnityEditor.Search;
 using UnityEngine;
@@ -179,7 +180,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
             // The last conversion has to result into the required end type
             chainIssues.Add(!requiredEndType.IsAssignableFrom(nextRequiredType));
 
-            var maybeInputType = Maybe.Nothing<Type>();
+            var maybeInputType = Maybe.None<Type>();
 
             if (!string.IsNullOrEmpty(CurrentInputType))
             {
@@ -192,7 +193,7 @@ namespace Sim.Faciem.uGUI.Editor.Controls.ConverterControl
             }
 
             var inputMatches = maybeInputType
-                .Map<bool>(type => type.IsAssignableFrom(expectedInputType))
+                .Map(type => type.IsAssignableFrom(expectedInputType))
                 .OrElse(true);
 
             // The first converter input must match the current input type if available

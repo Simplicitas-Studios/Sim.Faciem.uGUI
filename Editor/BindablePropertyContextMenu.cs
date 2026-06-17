@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Bebop.Monads;
 using R3;
 using Sim.Faciem.Editor.DI;
 using Sim.Faciem.uGUI.Bridges;
 using Sim.Faciem.uGUI.Editor.Internal;
+using Sim.Utility;
 using UnityEditor;
 using UnityEngine;
 using Unit = R3.Unit;
@@ -15,7 +15,7 @@ namespace Sim.Faciem.uGUI.Editor
         private static readonly Subject<Unit> s_editDoneSubject = new();
         private static IBindingManipulationProvider s_bindingManipulationProvider;
         private static SerializedProperty s_lastProperty;
-        private static IMaybe<SimComponentPropertyPath> s_lastPropertyTarget;
+        private static Maybe<SimComponentPropertyPath> s_lastPropertyTarget;
         private static bool s_ignoreSelf;
 
         public static Observable<Unit> EditDone => s_editDoneSubject;
@@ -27,7 +27,7 @@ namespace Sim.Faciem.uGUI.Editor
             s_bindingManipulationProvider = EditorInjector.Instance.ResolveInstance<IBindingManipulationProvider>();
 
             s_bindingManipulationProvider.BindableProperty
-                .Where(_ => s_lastProperty != null && !s_lastPropertyTarget.HasValue && !s_ignoreSelf)
+                .Where(_ => s_lastProperty != null && s_lastPropertyTarget.IsNone && !s_ignoreSelf)
                 .Subscribe(propertyChanged =>
                 {
                     var bindingInfo = s_lastProperty.FindPropertyRelative(nameof(IBindableProperty.BindingInfo));
@@ -39,7 +39,7 @@ namespace Sim.Faciem.uGUI.Editor
                 });
 
             s_bindingManipulationProvider.BindableProperty
-                .Where(_ => s_lastProperty != null && s_lastPropertyTarget.HasValue && !s_ignoreSelf)
+                .Where(_ => s_lastProperty != null && s_lastPropertyTarget.IsSome && !s_ignoreSelf)
                 .Subscribe(propertyChanged =>
                 {
                     if (s_lastProperty.serializedObject.targetObject is not Component component)
@@ -76,7 +76,7 @@ namespace Sim.Faciem.uGUI.Editor
 
         private static void OnContextualPropertyMenu(GenericMenu menu, SerializedProperty property)
         {
-            s_lastPropertyTarget = Maybe.Nothing<SimComponentPropertyPath>();
+            s_lastPropertyTarget = Maybe.None<SimComponentPropertyPath>();
 
             var targetObjectType = property.serializedObject.targetObject.GetType();
 
@@ -216,7 +216,7 @@ namespace Sim.Faciem.uGUI.Editor
                         }
                     };
 
-                    s_lastPropertyTarget = Maybe.From(genericBindableProperty.Target);
+                    s_lastPropertyTarget = Maybe.Some(genericBindableProperty.Target);
                     s_ignoreSelf = true;
                     s_bindingManipulationProvider.BindableProperty.Value = genericBindableProperty;
                     s_bindingManipulationProvider.BindableProperty.ForceNotify();
@@ -229,7 +229,7 @@ namespace Sim.Faciem.uGUI.Editor
 
         public static void EditBinding(IBindableProperty bindableProperty, SerializedProperty property)
         {
-            s_lastPropertyTarget = Maybe.Nothing<SimComponentPropertyPath>();
+            s_lastPropertyTarget = Maybe.None<SimComponentPropertyPath>();
             s_lastProperty = property;
             s_ignoreSelf = true;
             s_bindingManipulationProvider.BindableProperty.Value = bindableProperty;
@@ -242,7 +242,7 @@ namespace Sim.Faciem.uGUI.Editor
         public static void EditBinding(GenericBindableProperty bindableProperty, SerializedProperty property)
         {
             s_lastProperty = property;
-            s_lastPropertyTarget = Maybe.From(bindableProperty.Target);
+            s_lastPropertyTarget = Maybe.Some(bindableProperty.Target);
             s_ignoreSelf = true;
             s_bindingManipulationProvider.BindableProperty.Value = bindableProperty;
             s_bindingManipulationProvider.BindableProperty.ForceNotify();
