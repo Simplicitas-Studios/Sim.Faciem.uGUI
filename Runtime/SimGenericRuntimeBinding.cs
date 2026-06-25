@@ -17,8 +17,11 @@ namespace Sim.Faciem.uGUI
                 {
                     try
                     {
-                        setter(target, value);
-                        SimGenericBindingPostApply.PostApply(target, propertyPath);
+                        if (!SimGenericBindingApplyActions.ApplyAction(target, value, propertyPath))
+                        {
+                            setter(target, value);
+                        }
+                        SimGenericBindingApplyActions.PostApply(target, propertyPath);
                     }
                     catch (Exception e)
                     {

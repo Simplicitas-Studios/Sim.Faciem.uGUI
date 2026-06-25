@@ -17,7 +17,7 @@ namespace Sim.Faciem.uGUI
 #endif
         public static void Initialize()
         {
-            SimGenericBindingPostApply.RegisterPostApplyAction<TextMeshProUGUI>(((o, path) =>
+            SimGenericBindingApplyActions.RegisterPostApplyAction<TextMeshProUGUI>(((o, path) =>
             {
                 if (o is TextMeshProUGUI tmp)
                 {
@@ -25,7 +25,7 @@ namespace Sim.Faciem.uGUI
                 }
             }));
 
-            SimGenericBindingPostApply.RegisterPostApplyAction<TextMeshPro>(((o, path) =>
+            SimGenericBindingApplyActions.RegisterPostApplyAction<TextMeshPro>(((o, path) =>
             {
                 if (o is TextMeshPro tmp)
                 {
