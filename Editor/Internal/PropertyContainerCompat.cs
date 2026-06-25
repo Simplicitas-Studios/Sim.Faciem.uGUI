@@ -11,38 +11,67 @@ namespace Sim.Faciem.uGUI.Editor.Internal
     internal static class PropertyContainerCompat
     {
         private static readonly PropertyPathVisitor s_propertyPathVisitor = new();
+        private static readonly Dictionary<Type, List<(SimPropertyPath Path, Type Type)>> s_recursivePropertyCache = new();
+        private static readonly Dictionary<Type, bool> s_hasPropertiesCache = new();
 
         public static IEnumerable<(SimPropertyPath, Type)> GetAllPropertiesRecursive(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (s_recursivePropertyCache.TryGetValue(type, out var cachedProperties))
+            {
+                return cachedProperties;
+            }
+
             var path = new SimPropertyPath(new PropertyPath());
-            return GetAllPropertiesRecursive(type, path);
+            var properties = GetAllPropertiesRecursive(type, path, new HashSet<Type>())
+                .Select(x => (x.Item1, x.Item2))
+                .ToList();
+
+            s_recursivePropertyCache[type] = properties;
+            return properties;
         }
 
-        private static IEnumerable<(SimPropertyPath, Type)> GetAllPropertiesRecursive(Type type, SimPropertyPath path)
+        private static IEnumerable<(SimPropertyPath, Type)> GetAllPropertiesRecursive(Type type, SimPropertyPath path, HashSet<Type> recursionStack)
         {
-            foreach (var property in GetProperties(type))
+            if (type == null || !recursionStack.Add(type))
             {
-                var childPath = SimPropertyPath.AppendPath(path, property.Name);
-                var valueType = property.DeclaredValueType();
+                yield break;
+            }
 
-                var unpackedType = TryUnpackReactiveTypes(valueType, out var wasReactiveType);
-
-                if (wasReactiveType)
+            try
+            {
+                foreach (var property in GetProperties(type))
                 {
-                    childPath = SimPropertyPath.AppendSubscription(childPath);
-                }
+                    var childPath = SimPropertyPath.AppendPath(path, property.Name);
+                    var valueType = property.DeclaredValueType();
 
-                yield return (childPath, unpackedType);
+                    var unpackedType = TryUnpackReactiveTypes(valueType, out var wasReactiveType);
 
-                if (!HasProperties(unpackedType))
-                {
-                    continue;
-                }
+                    if (wasReactiveType)
+                    {
+                        childPath = SimPropertyPath.AppendSubscription(childPath);
+                    }
 
-                foreach (var child in GetAllPropertiesRecursive(unpackedType, childPath))
-                {
-                    yield return child;
+                    yield return (childPath, unpackedType);
+
+                    if (!HasProperties(unpackedType) || recursionStack.Contains(unpackedType))
+                    {
+                        continue;
+                    }
+
+                    foreach (var child in GetAllPropertiesRecursive(unpackedType, childPath, recursionStack))
+                    {
+                        yield return child;
+                    }
                 }
+            }
+            finally
+            {
+                recursionStack.Remove(type);
             }
         }
 
@@ -76,19 +105,24 @@ namespace Sim.Faciem.uGUI.Editor.Internal
                 return false;
             }
 
-            // Get the property bag for the type
+            if (s_hasPropertiesCache.TryGetValue(type, out var cachedHasProperties))
+            {
+                return cachedHasProperties;
+            }
+
             var bag = PropertyBag.GetPropertyBag(type);
             if (bag == null)
             {
+                s_hasPropertiesCache[type] = false;
                 return false;
             }
 
-            // Use a visitor to check if the bag has any properties
             var list = new List<IProperty>();
             s_propertyPathVisitor.Properties = list;
             bag.Accept(s_propertyPathVisitor);
 
             var hasAny = list.Count > 0;
+            s_hasPropertiesCache[type] = hasAny;
             return hasAny;
         }
 
